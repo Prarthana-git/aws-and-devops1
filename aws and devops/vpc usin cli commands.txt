@@ -1,0 +1,52 @@
+1.got to 
+https://aws.amazon.com/cli/
+2. download aws command line interface
+3.goto account icon select security credencials
+4.go to access keys 
+5.create new access key 
+  download it and save it
+Access Key ID:
+AKIAVNW5WDF2L4RARZHU
+Secret Access Key:
+m2kr+VZph+KsjR/cc02S1KEdsqaAS3Wn2PEsYi38
+      give your vpc region
+      us-east-1
+go to cmd prrompt
+type aws configure
+describe key pair
+aws ec2 describe-key-pairs
+===============================================
+start
+ "VpcId": "vpc-0088ddf15e67d1ccd",
+  "OwnerId": "373053331828",
+"AvailabilityZoneId": "use1-az6"
+ "SubnetId": "subnet-0f522d6ce0effeab3" public
+"SubnetId": "subnet-0ab099d755b4639f0" private
+
+"InternetGatewayId": "igw-0c91d3958785f4195"
+
+"RouteTableId": "rtb-07454109e737fa1b7" public
+"RouteTableId": "rtb-0b909060dd0d3657a" private
+
+"AssociationId": "rtbassoc-0d8af056199a058c7"
+ "NatGatewayId": "nat-07a879bed0831725e"
+"GroupId": "sg-071356effb05b73cf"(security group id)
+
+"SecurityGroupRuleId": "sgr-09410367c9cf68b26",
+            "GroupId": "sg-071356effb05b73cf",
+            "GroupOwnerId": "373053331828"
+
+"KeyPairId": "key-02570062301baf979"
+"KeyName": "MyCLIKey"
+ami-id : ami-005de95e8ff495156
+"InstanceId": "i-09fb61924e898d2dd"
+
+ellastic ip
+1. "PublicIp": "18.208.46.54"
+2."AllocationId": "eipalloc-073a64983ec5bff46"
+
+*****to change name*****
+aws ec2 create-tags --resources (idtochangename) --tags Key=Name,Value=CLIinstance
+
+*****to create instance****
+aws ec2 run-instances --image-id ami-005de95e8ff495156 --count 1 --instance-type t2.micro --key-name MyCLIKey --subnet-id subnet-0ab099d755b4639f0

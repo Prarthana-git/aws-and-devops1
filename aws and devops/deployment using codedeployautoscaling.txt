@@ -1,0 +1,9 @@
+1.login to frontendserver and login to backendautoscaling instance
+2.change user to ubuntu and run code deployagent commands
+3.create IAM role for autoscaling and give policy "autoscalingfullaccess"
+4.attach IAM role to bachendscaling instace
+5.goto codedeploy service and create apllication
+6.create deployment group add select Amazon EC2 Auto Scaling groups
+7.Enable load balamcing and select target group
+8.create deployment 
+done

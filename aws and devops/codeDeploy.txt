@@ -1,0 +1,28 @@
+       ###CodeDeploy on normal instances###
+1. Go to IAM create a role and add policy(EC2 instance) and attach that policy to our instance(backend).
+2. copy frontend ip and log in putty then coonect to backend(ssh -i danishlinux.pem ubuntu@backend ip)
+3. connected to backend then follow this commands.
+sudo apt-get update
+sudo apt-get install ruby-full
+sudo apt-get install wget
+cd /home/ubuntu
+wget https://aws-codedeploy-ca-central-1.s3.ca-central-1.amazonaws.com/latest/install
+chmod +x ./install
+sudo ./install auto
+sudo ./install auto > /tmp/logfile
+sudo ./install auto -v releases/codedeploy-agent-###.deb > /tmp/logfile
+sudo service codedeploy-agent start
+sudo service codedeploy-agent status
+
+4. Go to codedeploy select application create appliocation(name,EC2/On-premises)
+5. deployment group create deployment group(name,service role(AWScodeDepolyservicerole) create role on IAM and add ploicy)
+deploymenttype (in-place)
+Environment configuration (Amazon Ec2 instance) if ur working on autoscaling select(Amazon Ec2 Auto scaling group)
+load balancer (unable)
+create deployment group done
+5.Then create deployment
+select my application sytored in github
+add (token id, github name, commit id) 
+
+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   
+              ####Done####

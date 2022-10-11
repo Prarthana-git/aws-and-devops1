@@ -1,0 +1,20 @@
+why CF
+when we create application there we use lots of  resources if we want to execute this resources sepereatly or mange this resource we use cloudFormation.
+
+what CF
+Aws CloudFormation is a service that help you model and set up your AWS resources so that you can spend less time managing those resources and more time focusing on your application that run in AWS.
+
+USE of Template:
+Saving design of template.
+use multiple resion
+save the copy of template deploy that and use any region.
+
+Get started
+we need json (java script object notation) script
+why we need json script bcz we creating template in CF
+we can use drag and drop option feeling AWS resources when we doing this in backendis actully created json script.
+create your own json.
+
+json script:
+it is an open started format that uses human readable text to transmit data objects consisting of attribute-value pairs.
+

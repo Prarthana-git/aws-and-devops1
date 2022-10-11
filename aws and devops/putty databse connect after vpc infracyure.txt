@@ -1,0 +1,19 @@
+privatesubnet2         us-east-1a
+
+privatesubnet1         us-east-1e
+
+vi Microkey.pem
+chmod 600 Microkey.pem
+ls
+ssh -i Microkey.pem
+mysql -h endpoint  -u admin -p
+
+nat public mhade banawaycha priavte mhade jodayccha
+frontend ip==>putty access
+ssh -i microkey.pem ubuntu@privateip
+
+backend===>
+mysql -h endpoint -u username -p
+
+mysql -h database-1.cmt0x825rdnc.us-east-1.rds.amazonaws.com -u admin -p
+mysql>/q

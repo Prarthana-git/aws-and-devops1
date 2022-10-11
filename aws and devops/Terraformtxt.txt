@@ -1,0 +1,16 @@
+Terraform
+it is an infrabuilding and managing tool
+we create terraform file inside visual code 
+then we add user in aws account 
+inside vc do aws configure 
+add secrete key and id
+then follow the documentation of terraform to add terraform resources
+
+
+resource "aws_instance" "foo"
+       |	         |
+we adding    provider
+resource        name
+
+refere follow link
+https://youtu.be/LGwLUB7nddw

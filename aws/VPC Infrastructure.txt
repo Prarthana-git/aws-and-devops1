@@ -1,0 +1,108 @@
+To create VPC
+Launch vpc with cidr block 10.0.0.0/16
+
+1.first step to create vpc
+2.create internet gateway
+3.After Creation attach to the vpc
+ 
+4.create public Subnet
+   i.create public subnet in cidr block 10.0.0.0/24 check the availablity zone 
+   ii.create public subnet in cidr block 10.0.1.0/24 check the avialablity zone
+  main point make sure that both public subnets in different avilablity zone 
+
+
+  
+5.create route-Table for public subnet
+   attach internet-getway into route table with 0.0.0.0/0
+   subnet associations --attach both public subnet to one route table
+   
+6.create private Subnet 
+   i.create private subnet in cidr block 10.0.2.0/24 check the availablity zone 
+   ii.create private subnet in cidr block 10.0.3.0/24 check the avialablity zone
+  main point make sure that both private subnets in different avilablity zone 
+
+7.create nat-getway
+  main while creating natgetway use public subnets
+	
+8.create route-Table for private subnet
+   attach Nat-getway into route table with 0.0.0.0/0
+   subnet associations --attach both private subnet to one route table
+
+9.create the instance front-end-server
+		select free tier ubuntu-18
+		t2-micro
+		In Configure Instance Details: select our new vpc
+		select public-subnets to front-end-server instance
+		in Auto-assign Public IP enable the public ip
+    create front-end secqurity group :::::
+		front-end security group:::::
+		Custom TCP  		8000	0.0.0.0/0
+		HTTP	        	80		0.0.0.0/0	
+		SSH					22		0.0.0.0/0
+		
+	Create .PEM KEY for ssh connection to use the putty
+		
+		
+10.create the instance Back-end-server
+		select free tier ubuntu-18
+		t2-micro
+		In Configure Instance Details: select our new vpc
+		select private-subnets to back-end-server instance
+		in Auto-assign Public IP disable the public ip
+    create front-end secqurity group :::::
+		front-end security group:::::
+		SSH				22		0.0.0.0/0	–
+		Custom TCP		8000	0.0.0.0/0
+	
+    Same key .PEM KEY for ssh connection to use the putty	
+		
+11.Now create RDS
+		go to the rds :: Create DB subnet group 
+		                 select our vpc
+						 create group for both private-subnets
+						 and create DB subnet group 
+
+		
+		go to database into rds to create database
+		        give name to the database
+				select our vpc
+				give name to the database
+				
+	    create security group for RDS
+1.Go to database 
+2.vpc security group
+3.edit inbound rule
+4.select type msyql/Aurora
+5.go to backend instance
+6.security group
+7.add in database in bound save it
+		    MYSQL/Aurora		3306	0.0.0.0/0	–
+            Custom TCP	          0	    select private secqurity group that attachto the back-end-server
+
+    done with RDS
+
+
+
+DONE WITH INFRASTRUCTURE :
+
+1 VPC
+2 PublicSUBNET
+2 PRIVATE SUBNET
+1 public route-Table
+1 private route-Table
+1 Public Instance
+1 PRIVATE Instance
+1 DATABASE
+
+in putty
+
+vi  [key].pem(Paste pem key)
+chmod 600 keyname.pem
+ls
+go to backend ....go to backenserver instance..connect.. select example
+mysql -h endpoint -u admin -p
+
+ 	
+
+
+

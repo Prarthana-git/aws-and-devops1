@@ -1,0 +1,139 @@
+1) Launch Docker instance on aws
+2) Install docker on server by accessing with putty
+3) After Installing check Status of docker
+     sudo systemctl status docker
+4) Create 3 folders and create Dockerfile in each folder
+   mkdir frontend
+   mkdir backend
+   mkdir database
+5)Move into database folder and create Dockerfile for database
+   cd database
+   nano Dockerfile
+*********************************************
+FROM mysql:latest
+ENV MYSQL_ROOT_PASSWORD=Md78678678
+ENV MYSQL_DATABASE=database_chatapp
+ENV MYSQL_USER=mohsin
+ENV MYSQL_PASSWORD=Md78678678
+EXPOSE 3306
+***************************************************
+  Now create database_image with this Dockerfile
+   docker build -t database_image
+  
+6)Move into backend folder and create Dockerfile for backend
+   cd ..
+   cd backend
+   Here clone your github repository
+   Note:- Before cloning u have to change the host name in settings.py U have to give database container name
+   git clone https://github.com/moshtab/chatapp.git
+   nano Dockerfile
+******************************************
+FROM python:3.6
+RUN apt-get update
+RUN apt-get install --yes python3-pip
+RUN mkdir /new_chat_application
+COPY chatapp /new_chatapp
+WORKDIR /new_chatapp
+RUN pip3 install -r requirements.txt
+RUN pip3 install mysqlclient
+EXPOSE 8000
+WORKDIR /new_chatapp/fundoo/
+CMD python3 manage.py migrate 
+ENTRYPOINT  python3 manage.py runserver 0.0.0.0:8000
+******************************************************************
+ Now create backend_image with this Dockerfile
+   docker build -t backend_image
+7)Move into frontend folder and create Dockerfile for backend
+   cd ..
+   cd frontend
+   create a fundoo.conf file to write nginx configuration and we use this file in Dockerfile by COPY cmd
+   nano fundoo.conf
+
+**********************************************************************
+server {
+listen 80;
+server_name _default;
+#location = /favicon.ico { access_log off; log_not_found off; }
+location /static/ {
+root /new_chatapp/fundoo;
+}
+location / {
+include proxy_params;
+proxy_pass http://backend-container:8000;
+}
+}
+*******************************************************
+   nano Dockerfile
+************************************************
+FROM ubuntu
+RUN apt-get update
+RUN apt-get install -y nginx
+COPY fundoo.conf /etc/nginx/sites-available/fundoo
+RUN ln -s /etc/nginx/sites-available/fundoo /etc/nginx/sites-enabled
+RUN rm -rf /etc/nginx/sites-enabled/default
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+*************************************************************
+  Now create frontend_image with this Dockerfile
+   docker build -t frontend_image
+8) check the docker images are created or not by
+   docker images
+9) Now Create 3 containers with these images
+    docker run -d --name database_container database_image
+   While Creating backend_container u have to link it to database_container
+    docker run -d --name backend_container --link database_container backend_image
+   While Creating frontend_container u have to link it to backend_container and also to localhost
+    docker run -d --name frontend_container -p 80:80 --link backend_container frontend_image
+10) for checking containers status
+    docker ps -a
+11) To Start containers 
+    docker start container_name
+12)  To stop Containers
+    docker stop container_name 
+13) check with docker IP on browser whether the application is accessing or not  
+
+********************************************************************************************************************************************
+For Docker compose 
+1) Install docker-compose on server
+2) write docker-compose.yml file 
+   sudo nano docker-compose.yml
+***************************************docker-compose.yml******************************************************************
+version: '2'
+services:
+  database:
+    image: database_imageupdated
+    container_name: database-servicedc
+    volumes:
+    - mysqldata:/var/lib/mysqldata
+  backend:
+    build:
+      dockerfile: Dockerfile
+      context: /home/ubuntu/backendnew
+    image: backend_imageupdateddc
+    container_name: backend_containerdc
+    links:
+    - database
+  frontend:
+    build:
+      dockerfile: Dockerfile
+      context: /home/ubuntu/docker-compose
+    image: frontend_imagedc
+    container_name: frontend_containerdc
+    ports:
+    - 80:80
+    links:
+    - backend
+volumes:
+  mysqldata:
+*****************************************************************************************************
+To check do 
+  docker-compose config
+To run docker-compose file
+  docker-compose up -d  (It will run on background)
+To stop docker-compose containers
+  docker-compose down
+If u changed anything in the existing image then to build it use
+  docker-compose up --build -d
+
+  
+      

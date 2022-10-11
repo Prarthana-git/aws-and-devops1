@@ -1,0 +1,84 @@
+1.create 1 vpc   10.0.0.0/16
+
+2.create 1 public subnet 10.0.0.0/24
+
+3.create internet gateway
+
+4.attach to vpc select internet gateway actions attach
+
+5.create route table for public subnet
+	add route in route table as internet gateway
+                search 0.0.0.0/0 and internate gateway
+	add subnet assoication of public subnet
+
+6.create two private subnets'  10.0.1.0/24 and10.0.2.0/24
+ 	make sure both are in diffferent availibility zone
+
+7.create nat gateway main while creating natgetway use public subnets
+                public mhade banwaycha private mhade jodaycha
+ 
+8. create route table  for private subnet
+
+9.attach  Nat-getway into route table with 0.0.0.0/0	
+
+10.subnet associattions-attach both private subnet to one route table
+      	
+11.create instance frontendserver
+     select free tier ubuntu-18
+     t2-micro
+     in Configure Instance Details:select our new vpc
+    select public subnet to frontendserver instance
+    in auto-assign Public IP enable the public ip 
+
+create front-end security group
+    Custom TCP 	8000
+ 0.0.0.0/0
+    HTTP		80
+0.0.0.0/0
+   SSH		22
+0.0.0.0/0
+Create .PEM key for SSH connection to use putty
+
+12.create the instance Back-end-server
+		select free tier ubuntu-18
+		t2-micro
+		In Configure Instance Details: select our new vpc
+		select private-subnets to back-end-server instance
+		in Auto-assign Public IP disable the public ip
+    create Back-end secqurity group :::::
+		front-end security group:::::
+		SSH				22		0.0.0.0/0	–
+		Custom TCP		8000	0.0.0.0/0
+	
+    Same key .PEM KEY for ssh connection to use the putty	
+		
+13.Now create RDS
+go to the rds :: Create DB subnet group 
+                       select our vpc
+                       create group for both private-subnets and then create                         DB subnet group 	
+                         go to database into rds to create database
+                         give name to the database
+                         select our vpc
+	         give name to the database
+				
+    create secqurity group for RDS
+1.select created database 
+2.go to vpc security group
+3.edit inbound rule
+4.select type msyql/Aurora
+5.go to backend instance
+6.copy security group
+7.add in database in bound save it
+		    MYSQL/Aurora		3306	0.0.0.0/0	–
+            Custom TCP	          0	    select private security group that attachto the back-end-server
+
+    done with RDS
+
+================================================
+in putty
+
+vi  [key].pem(Paste pem key)
+chmod 600 keyname.pem
+ls
+go to backend ....go to backenserver instance..connect.. select example
+mysql -h endpoint -u admin -p
